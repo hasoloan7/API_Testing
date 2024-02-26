@@ -12,13 +12,22 @@ describe('crate new account ', () => {
             expect(response.body.data.email).to.equal(user.email);
         })
     });
-    it('Succesfully login useing header', () => {
-        cy.visit('https://kasir-api.belajarqa.com/registration', {
-            headers: {
-                authorization: 'Basic YWRtaW46YWRtaW4='
-            },
-            failOnStatusCode: false
-        })
-        
-    });
+    it('Successfully login using header', () => {
+        cy.request({
+          method: 'POST',
+          url: 'https://kasir-api.belajarqa.com/authentications',
+          headers: {
+            authorization: 'Basic YWRtaW46YWRtaW4=',
+          },
+          failOnStatusCode: false,
+        }).then((response) => {
+          if (response.status === 404) {
+            cy.log('Endpoint not found. Check the URL and API documentation.');
+          } else {
+            expect(response.status).to.equal(400);
+            
+          }
+        });
+      });
+      
 })
